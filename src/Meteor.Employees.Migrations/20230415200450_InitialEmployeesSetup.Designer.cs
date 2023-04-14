@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Meteor.Employees.Migrations
 {
     [DbContext(typeof(EmployeesContext))]
-    [Migration("20230411142538_InitialEmployeesSetup")]
+    [Migration("20230415200450_InitialEmployeesSetup")]
     partial class InitialEmployeesSetup
     {
         /// <inheritdoc />
@@ -74,6 +74,14 @@ namespace Meteor.Employees.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_employees");
+
+                    b.HasIndex("EmailAddress")
+                        .IsUnique()
+                        .HasDatabaseName("ix_employees_email_address");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique()
+                        .HasDatabaseName("ix_employees_phone_number");
 
                     b.ToTable("employees", (string)null);
                 });

@@ -72,6 +72,14 @@ namespace Meteor.Employees.Migrations
                     b.HasKey("Id")
                         .HasName("pk_employees");
 
+                    b.HasIndex("EmailAddress")
+                        .IsUnique()
+                        .HasDatabaseName("ix_employees_email_address");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique()
+                        .HasDatabaseName("ix_employees_phone_number");
+
                     b.ToTable("employees", (string)null);
                 });
 #pragma warning restore 612, 618

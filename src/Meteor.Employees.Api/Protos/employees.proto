@@ -1,21 +1,61 @@
 syntax = "proto3";
 
-option csharp_namespace = "Meteor.Employees.Api";
+option csharp_namespace = "Meteor.Employees.Api.Grpc";
 
-package greet;
+package meteor.employees;
 
-// The greeting service definition.
-service Greeter {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply);
+enum EMPLOYEE_STATUS {
+  EMPLOYEE_STATUS_INACTIVE = 0;
+  EMPLOYEE_STATUS_ACTIVE = 1;
+  EMPLOYEE_STATUS_TERMINATED = 2;
+  EMPLOYEE_STATUS_ON_LEAVE = 3;
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+message Employee {
+  int32 id = 1;
+  string email_address = 2;
+  string phone_number = 3;
+  string first_name = 4;
+  string last_name = 5;
+  EMPLOYEE_STATUS status = 6;
 }
 
-// The response message containing the greetings.
-message HelloReply {
+message ValidationError {
   string message = 1;
+  repeated string fields = 2;
+}
+
+message ValidationResult {
+  string message = 1;
+  repeated ValidationError errors = 2;
+}
+
+message GetEmployeeByIdRequest {
+  int32 id = 1;
+}
+
+message GetEmployeeByEmailRequest {
+  string email_address = 1;
+}
+
+message CreateEmployeeRequest {
+  string email_address = 1;
+  string phone_number = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string password = 5;
+  bool activate = 6;
+}
+
+message SaveEmployeeResponse {
+  oneof result {
+    Employee employee = 1;
+    ValidationResult validation_result = 2;
+  }
+}
+
+service EmployeesService {
+  rpc GetEmployeeById(GetEmployeeByIdRequest) returns (Employee);
+  rpc GetEmployeeByEmail(GetEmployeeByEmailRequest) returns (Employee);
+  rpc CreateEmployee(CreateEmployeeRequest) returns (SaveEmployeeResponse);
 }
