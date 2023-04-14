@@ -13,6 +13,6 @@ public class MeteorPhoneNumberAttribute : ValidationAttribute
             return true;
         }
 
-        return stringValue.All(char.IsDigit) && (stringValue.Length > 9 || stringValue.Length < 14);
+        return stringValue.All(char.IsDigit) && stringValue.Length is > 9 and < 14;
     }
 }
