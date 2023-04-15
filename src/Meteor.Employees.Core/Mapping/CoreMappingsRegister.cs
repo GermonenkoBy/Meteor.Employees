@@ -14,5 +14,10 @@ public class CoreMappingsRegister : IRegister
             .Ignore(e => e.Id)
             .Ignore(e => e.PasswordHash)
             .Ignore(e => e.PasswordSalt);
+
+        config.ForType<UpdateEmployeeDto, Employee>()
+            .Ignore(e => e.PasswordHash)
+            .Ignore(e => e.PasswordSalt)
+            .IgnoreNullValues(true);
     }
 }

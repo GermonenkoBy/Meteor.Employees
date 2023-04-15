@@ -11,4 +11,8 @@ public interface IEmployeesService
     Task<Employee> GetEmployeeAsync(string emailAddress);
 
     Task<Employee> CreateEmployeeAsync(CreateEmployeeDto employeeDto);
+
+    Task<Employee> UpdateEmployeeAsync(int employeeId, UpdateEmployeeDto employeeDto);
+
+    Task RemoveEmployeeAsync(int employeeId);
 }

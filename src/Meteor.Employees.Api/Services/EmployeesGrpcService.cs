@@ -54,4 +54,40 @@ public class EmployeesGrpcService : EmployeesService.EmployeesServiceBase
             };
         }
     }
+
+    public override async Task<SaveEmployeeResponse> UpdateEmployee(
+        UpdateEmployeeRequest request,
+        ServerCallContext context
+    )
+    {
+        var dto = _mapper.Map<UpdateEmployeeDto>(request);
+
+        try
+        {
+            var employee = await _employeesService.UpdateEmployeeAsync(request.Id, dto);
+            return new()
+            {
+                Employee = _mapper.Map<Employee>(employee)
+            };
+        }
+        catch (MeteorValidationException e)
+        {
+            return new()
+            {
+                ValidationResult = _mapper.Map<ValidationResult>(e)
+            };
+        }
+    }
+
+    public override async Task<StringResponse> RemoveEmployee(
+        RemoveEmployeeRequest request,
+        ServerCallContext context
+    )
+    {
+        await _employeesService.RemoveEmployeeAsync(request.Id);
+        return new()
+        {
+            Message = "Employee data removed."
+        };
+    }
 }

@@ -1,15 +1,15 @@
 ﻿using MapsterMapper;
 using Meteor.Common.Core.Exceptions;
 using Meteor.Common.Cryptography.Abstractions;
-using Meteor.Employees.Core.Dtos;
-using Meteor.Employees.Core.Helpers;
-using Meteor.Employees.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Meteor.Employees.Core.Services;
 
 using Contracts;
 using Validators.Contracts;
+using Dtos;
+using Helpers;
+using Models;
 
 public class EmployeesService : IEmployeesService
 {
@@ -69,5 +69,37 @@ public class EmployeesService : IEmployeesService
         await _context.SaveChangesAsync();
 
         return employee;
+    }
+
+    public async Task<Employee> UpdateEmployeeAsync(int employeeId, UpdateEmployeeDto employeeDto)
+    {
+        var employee = await _context.Employees.FindAsync(employeeId);
+        if (employee is null)
+        {
+            throw new MeteorNotFoundException("Employee not found.");
+        }
+
+        _mapper.Map(employeeDto, employee);
+        if (employeeDto.Password is not null)
+        {
+            (employee.PasswordHash, employee.PasswordSalt) = _hasher.Hash(employeeDto.Password);
+        }
+
+        await ValidatorsRunner.EnsureIsValid(employee, _validators, EmployeeDataErrorMessage);
+
+        await _context.SaveChangesAsync();
+        return employee;
+    }
+
+    public async Task RemoveEmployeeAsync(int employeeId)
+    {
+        var employee = await _context.Employees.FindAsync(employeeId);
+        if (employee is null)
+        {
+            return;
+        }
+
+        _context.Employees.Remove(employee);
+        await _context.SaveChangesAsync();
     }
 }
