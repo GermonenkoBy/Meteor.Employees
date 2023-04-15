@@ -1,7 +1,6 @@
 using Grpc.Core;
 using Mapster;
 using MapsterMapper;
-using Meteor.Common.Core.Exceptions;
 using Meteor.Common.Cryptography.DependencyInjection.Extensions;
 using Meteor.Employees.Api.HostedServices;
 using Meteor.Employees.Api.Interceptors;

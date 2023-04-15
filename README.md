@@ -17,9 +17,7 @@ dotnet ef migrations add {MIGRATION_NAME} --project src/Meteor.Employees.Migrati
 
 To build the image run the following command
 ```shell
-docker build -f src/Meteor.Employees.Api/Dockerfile -t sgermonenko/meteor-employees:{version} \
---build-arg NUGET_USER={USERNAME} \ 
---build-arg NUGET_PASSWORD={PASSWORD} .
+docker build -f src/Meteor.Employees.Api/Dockerfile -t sgermonenko/meteor-employees:{version} --build-arg NUGET_USER={USERNAME} --build-arg NUGET_PASSWORD={PASSWORD} .
 ```
 where:
 - {version} is microservice release version
