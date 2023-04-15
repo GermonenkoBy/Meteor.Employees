@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meteor.Employees.Api", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meteor.Employees.Infrastructure", "src\Meteor.Employees.Infrastructure\Meteor.Employees.Infrastructure.csproj", "{1DAF502B-0CE9-4D1A-871E-6EED8B27E49E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{121A9019-EF8D-4A67-BB9F-D1A6889833F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meteor.Employees.Core.Tests", "tests\Meteor.Employees.Core.Tests\Meteor.Employees.Core.Tests.csproj", "{3E6ED60F-D062-4F0E-9FB3-49850305F2E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,7 @@ Global
 		{2AD0E502-BC63-447C-93D6-B0B7888FCC5C} = {85DCA195-817D-47CA-8B70-29C0158C3B0E}
 		{8EEF5F64-44F2-4DE8-84F9-65D53ADCB0DD} = {85DCA195-817D-47CA-8B70-29C0158C3B0E}
 		{1DAF502B-0CE9-4D1A-871E-6EED8B27E49E} = {85DCA195-817D-47CA-8B70-29C0158C3B0E}
+		{3E6ED60F-D062-4F0E-9FB3-49850305F2E9} = {121A9019-EF8D-4A67-BB9F-D1A6889833F4}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3DDA2B2E-CABE-42A8-9441-2E9C253B6DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -38,5 +43,9 @@ Global
 		{1DAF502B-0CE9-4D1A-871E-6EED8B27E49E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DAF502B-0CE9-4D1A-871E-6EED8B27E49E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DAF502B-0CE9-4D1A-871E-6EED8B27E49E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E6ED60F-D062-4F0E-9FB3-49850305F2E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E6ED60F-D062-4F0E-9FB3-49850305F2E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E6ED60F-D062-4F0E-9FB3-49850305F2E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E6ED60F-D062-4F0E-9FB3-49850305F2E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

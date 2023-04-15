@@ -10,7 +10,7 @@ TODO: Add build steps
 
 To add migration run the following command:
 ```shell
-dotnet ef migrations add InitialEmployeesSetup --project src/Meteor.Employees.Migrations --startup-project src/Meteor.Employees.Api -o ./
+dotnet ef migrations add {MIGRATION_NAME} --project src/Meteor.Employees.Migrations --startup-project src/Meteor.Employees.Api -o ./
 ```
 
 ## Docker Build/Push
