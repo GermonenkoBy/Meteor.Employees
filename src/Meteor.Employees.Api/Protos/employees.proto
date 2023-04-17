@@ -61,6 +61,11 @@ message RemoveEmployeeRequest {
   int32 id = 1;
 }
 
+message ValidatePasswordRequest {
+  int32 employee_id = 1;
+  string password = 2;
+}
+
 message SaveEmployeeResponse {
   oneof result {
     Employee employee = 1;
@@ -72,10 +77,16 @@ message StringResponse {
   string message = 1;
 }
 
+message PasswordValidationResponse {
+  int32 employee_id = 1;
+  bool valid = 2;
+}
+
 service EmployeesService {
   rpc GetEmployeeById(GetEmployeeByIdRequest) returns (Employee);
   rpc GetEmployeeByEmail(GetEmployeeByEmailRequest) returns (Employee);
   rpc CreateEmployee(CreateEmployeeRequest) returns (SaveEmployeeResponse);
   rpc UpdateEmployee(UpdateEmployeeRequest) returns (SaveEmployeeResponse);
+  rpc ValidatePassword(ValidatePasswordRequest) returns (PasswordValidationResponse);
   rpc RemoveEmployee(RemoveEmployeeRequest) returns (StringResponse);
 }

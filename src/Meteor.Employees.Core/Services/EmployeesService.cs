@@ -91,6 +91,18 @@ public class EmployeesService : IEmployeesService
         return employee;
     }
 
+    public async Task<bool> ValidatePassword(int employeeId, string password)
+    {
+        var employee = await _context.Employees.FindAsync(employeeId);
+        if (employee is null)
+        {
+            throw new MeteorNotFoundException("Employee not found.");
+        }
+
+        var hashToCompare = _hasher.Hash(password, employee.PasswordSalt);
+        return hashToCompare.SequenceEqual(employee.PasswordHash);
+    }
+
     public async Task RemoveEmployeeAsync(int employeeId)
     {
         var employee = await _context.Employees.FindAsync(employeeId);

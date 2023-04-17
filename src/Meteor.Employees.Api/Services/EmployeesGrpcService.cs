@@ -79,6 +79,19 @@ public class EmployeesGrpcService : EmployeesService.EmployeesServiceBase
         }
     }
 
+    public override async Task<PasswordValidationResponse> ValidatePassword(
+        ValidatePasswordRequest request,
+        ServerCallContext context
+    )
+    {
+        var valid = await _employeesService.ValidatePassword(request.EmployeeId, request.Password);
+        return new()
+        {
+            EmployeeId = request.EmployeeId,
+            Valid = valid,
+        };
+    }
+
     public override async Task<StringResponse> RemoveEmployee(
         RemoveEmployeeRequest request,
         ServerCallContext context

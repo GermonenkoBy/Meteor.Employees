@@ -14,5 +14,7 @@ public interface IEmployeesService
 
     Task<Employee> UpdateEmployeeAsync(int employeeId, UpdateEmployeeDto employeeDto);
 
+    Task<bool> ValidatePassword(int employeeId, string password);
+
     Task RemoveEmployeeAsync(int employeeId);
 }
