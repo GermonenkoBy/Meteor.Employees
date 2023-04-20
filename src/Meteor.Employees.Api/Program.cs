@@ -74,7 +74,10 @@ builder.Services.AddGrpcClient<CustomersService.CustomersServiceClient>(options 
 {
     var url = builder.Configuration.GetValue<string>("Routing:ControllerUrl") ?? string.Empty;
     options.Address = new Uri(url);
-    options.ChannelOptionsActions.Add(opt => opt.Credentials = ChannelCredentials.Insecure);
+    if (options.Address.Scheme.Equals("http", StringComparison.OrdinalIgnoreCase))
+    {
+        options.ChannelOptionsActions.Add(opt => opt.Credentials = ChannelCredentials.Insecure);
+    }
 });
 
 /*
