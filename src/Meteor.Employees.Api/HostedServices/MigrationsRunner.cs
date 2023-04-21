@@ -81,7 +81,7 @@ public class MigrationsRunner : BackgroundService
                     return;
                 }
 
-                logger.LogInformation($"Running migration for {customer.Name} ({customer.Domain}).");
+                logger.LogInformation($"Running migration for {customer.Name} ({customer.Domain})");
 
                 var settings = await customersClient.GetCustomerSettingsAsync(customer.Id);
                 using var customerSubScope = _serviceProvider.CreateScope();
@@ -91,7 +91,7 @@ public class MigrationsRunner : BackgroundService
                 await using var context = customerSubScope.ServiceProvider.GetRequiredService<EmployeesContext>();
                 await context.Database.MigrateAsync(cancellationToken: stoppingToken);
 
-                logger.LogInformation($"Successfully completed migration for {customer.Name} ({customer.Domain}).");
+                logger.LogInformation($"Successfully completed migration for {customer.Name} ({customer.Domain})");
             }
         }
     }
