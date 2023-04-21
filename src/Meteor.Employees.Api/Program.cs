@@ -2,6 +2,7 @@ using Grpc.Core;
 using Mapster;
 using MapsterMapper;
 using Meteor.Common.Cryptography.DependencyInjection.Extensions;
+using Meteor.Employees.Api.HealthChecks;
 using Meteor.Employees.Api.HostedServices;
 using Meteor.Employees.Api.Interceptors;
 using Meteor.Employees.Api.Mapping;
@@ -20,6 +21,8 @@ using Meteor.Employees.Core.Services.Validators.Contracts;
 using Meteor.Employees.Infrastructure.Contracts;
 using Meteor.Employees.Infrastructure.Grpc;
 using Meteor.Employees.Infrastructure.Mapping;
+using Meteor.Employees.Infrastructure.Services;
+using Meteor.Employees.Infrastructure.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement;
@@ -48,14 +51,17 @@ builder.Services.AddGrpc(options =>
 });
 builder.Services.AddGrpcReflection();
 
-builder.Services.AddHostedService<MigrationsRunner>();
+builder.Services.AddHostedService<MigrationsJob>();
 builder.Services.AddScoped<ICustomersClient, GrpcCustomersClient>();
 builder.Services.AddScoped<ICustomerDataAccessor, CustomerDataAccessor>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IValidator<Employee>, EmployeeModelValidator>();
 builder.Services.AddScoped<IValidator<Employee>, EmployeeUniqueConstraintsValidator>();
-builder.Services.AddSingleton<ICustomerIdProvider, HeadersCustomerIdProvider>();
 builder.Services.AddScoped<CurrentCustomerDataPropagationMiddleware>();
+builder.Services.AddSingleton<ICustomerIdProvider, HeadersCustomerIdProvider>();
+builder.Services.AddTransient<IMigrationsRunner, MigrationsRunner>();
+builder.Services.AddTransient<ISingleCustomerMigrationsRunner, SingleCustomerMigrationsRunner>();
+builder.Services.AddSingleton<MigrationsHealthCheck>();
 
 builder.Services.AddHasher(options =>
 {
@@ -80,20 +86,6 @@ builder.Services.AddGrpcClient<CustomersService.CustomersServiceClient>(options 
     }
 });
 
-/*
-builder.Services.AddDbContext<EmployeesContext>(
-    options =>
-    {
-        options
-            .UseNpgsql(
-                string.Empty,
-                opt => opt.MigrationsAssembly("Meteor.Employees.Migrations")
-            )
-            .UseSnakeCaseNamingConvention()
-            .EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
-    }
-);*/
-
 builder.Services.AddDbContext<EmployeesContext>(
     (services, options) =>
     {
@@ -115,7 +107,20 @@ builder.Services.AddDbContext<EmployeesContext>(
     }
 );
 
+
+builder.Services.AddHealthChecks()
+    .AddCheck<MigrationsHealthCheck>("migrations", tags: new[] { "migrations" });
+
 var app = builder.Build();
+
+app.MapHealthChecks("health", new()
+{
+    ResponseWriter = ResponseWriters.BaseWriter
+});
+app.MapHealthChecks("health/migrations", new()
+{
+    Predicate = options => options.Tags.Contains("migrations")
+});
 
 app.UseMiddleware<CurrentCustomerDataPropagationMiddleware>();
 app.MapGrpcReflectionService();
