@@ -20,7 +20,7 @@ public class SingleCustomerMigrationsRunner : ISingleCustomerMigrationsRunner
     public async Task RunForCustomer(Customer customer, CancellationToken cancellationToken = new())
     {
         using var scope = _serviceProvider.CreateScope();
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<IServiceProvider>>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<SingleCustomerMigrationsRunner>>();
         var customersClient = scope.ServiceProvider.GetRequiredService<ICustomersClient>();
         var customerDataAccessor = scope.ServiceProvider.GetRequiredService<ICustomerDataAccessor>();
 
@@ -47,7 +47,7 @@ public class SingleCustomerMigrationsRunner : ISingleCustomerMigrationsRunner
             await using var employeesContext = scope.ServiceProvider.GetRequiredService<EmployeesContext>();
             await employeesContext.Database.MigrateAsync(cancellationToken);
             logger.LogInformation(
-                "Successfully applied migrations for {CustomerName} ({CustomerDomain}): customer settings are not setup",
+                "Successfully applied migrations for {CustomerName} ({CustomerDomain})",
                 customer.Name,
                 customer.Domain
             );
