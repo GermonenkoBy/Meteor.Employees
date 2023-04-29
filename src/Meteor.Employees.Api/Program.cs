@@ -24,6 +24,7 @@ using Meteor.Employees.Infrastructure.Mapping;
 using Meteor.Employees.Infrastructure.Services;
 using Meteor.Employees.Infrastructure.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement;
 
@@ -42,6 +43,12 @@ if (!string.IsNullOrEmpty(appConfigurationConnectionString))
             .Select(KeyFilter.Any, $"{builder.Environment.EnvironmentName}-Employees");
     });
 }
+
+var serviceBusConnectionString = builder.Configuration.GetConnectionString("AzureServiceBus") ?? string.Empty;
+builder.Services.AddAzureClients(azureBuilder =>
+{
+    azureBuilder.AddServiceBusClient(serviceBusConnectionString);
+});
 
 builder.Services.AddFeatureManagement();
 
