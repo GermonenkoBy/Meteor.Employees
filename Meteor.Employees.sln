@@ -14,6 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{121A9019
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meteor.Employees.Core.Tests", "tests\Meteor.Employees.Core.Tests\Meteor.Employees.Core.Tests.csproj", "{3E6ED60F-D062-4F0E-9FB3-49850305F2E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solutionItems", "solutionItems", "{2D0E1CBD-26FE-4191-B315-631BF46124C0}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

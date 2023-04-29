@@ -6,6 +6,8 @@ namespace Meteor.Employees.Core.Contracts;
 
 public interface ICustomersClient
 {
+    Task<Customer?> GetCustomerAsync(int customerId);
+
     Task<CustomerSettings?> GetCustomerSettingsAsync(int customerId);
 
     Task<PagedResult<Customer>> GetCustomersPageAsync(CustomersFilter filter);
