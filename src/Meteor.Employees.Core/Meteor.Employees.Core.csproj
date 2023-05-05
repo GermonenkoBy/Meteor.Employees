@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
@@ -10,6 +10,7 @@
       <PackageReference Include="Mapster" Version="7.3.0" />
       <PackageReference Include="meteor.common.core" Version="1.0.0" />
       <PackageReference Include="Meteor.Common.Cryptography.Abstractions" Version="1.0.0" />
+      <PackageReference Include="Meteor.Common.Messaging.Abstractions" Version="1.0.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
       <PackageReference Include="Microsoft.FeatureManagement" Version="2.5.1" />
     </ItemGroup>

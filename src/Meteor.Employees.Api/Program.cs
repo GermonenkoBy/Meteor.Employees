@@ -2,6 +2,7 @@ using Grpc.Core;
 using Mapster;
 using MapsterMapper;
 using Meteor.Common.Cryptography.DependencyInjection.Extensions;
+using Meteor.Common.Messaging.DependencyInjection.Extensions;
 using Meteor.Employees.Api.HealthChecks;
 using Meteor.Employees.Api.Interceptors;
 using Meteor.Employees.Api.Jobs;
@@ -11,6 +12,7 @@ using Meteor.Employees.Api.Services;
 using Meteor.Employees.Api.Services.Contracts;
 using Meteor.Employees.Core;
 using Meteor.Employees.Core.Contracts;
+using Meteor.Employees.Core.Dtos;
 using Meteor.Employees.Core.Exceptions;
 using Meteor.Employees.Core.Mapping;
 using Meteor.Employees.Core.Models;
@@ -62,6 +64,7 @@ builder.Services.AddHostedService<MigrationsJob>();
 builder.Services.AddScoped<ICustomersClient, GrpcCustomersClient>();
 builder.Services.AddScoped<ICustomerDataAccessor, CustomerDataAccessor>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
+builder.Services.Decorate<IEmployeesService, EmployeesServiceMessagingDecorator>();
 builder.Services.AddScoped<IValidator<Employee>, EmployeeModelValidator>();
 builder.Services.AddScoped<IValidator<Employee>, EmployeeUniqueConstraintsValidator>();
 builder.Services.AddScoped<CurrentCustomerDataPropagationMiddleware>();
@@ -77,10 +80,25 @@ builder.Services.AddHasher(options =>
     options.RequestBytesLength = builder.Configuration.GetValue<int>("Security:Hashing:RequestBytesLength");
 });
 
+builder.Services.AddServiceBusPublisher<EmployeeChangedMessage>(options =>
+{
+    options.SenderName = "Employees";
+    options.TopicName = "employees.changed";
+});
+
+builder.Services.AddServiceBusPublisher<EmployeeRemovedMessage>(options =>
+{
+    options.SenderName = "Employees";
+    options.TopicName = "employees.removed";
+});
+
 var config = new TypeAdapterConfig();
-config.Apply(new ApiMappingsRegister());
-config.Apply(new CoreMappingsRegister());
-config.Apply(new InfrastructureMappingsRegister());
+config.Apply(
+    new ApiMappingsRegister(),
+    new CoreMappingsRegister(),
+    new InfrastructureMappingsRegister()
+);
+
 builder.Services.AddSingleton<IMapper>(new Mapper(config));
 
 builder.Services.AddGrpcClient<CustomersService.CustomersServiceClient>(options =>
