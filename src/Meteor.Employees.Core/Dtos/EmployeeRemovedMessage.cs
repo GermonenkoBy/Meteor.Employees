@@ -3,4 +3,6 @@
 public record EmployeeRemovedMessage
 {
     public int Id;
+
+    public int CustomerId;
 }

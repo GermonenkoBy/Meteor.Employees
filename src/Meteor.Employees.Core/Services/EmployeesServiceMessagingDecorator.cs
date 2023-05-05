@@ -1,5 +1,6 @@
 ﻿using MapsterMapper;
 using Meteor.Common.Messaging.Abstractions;
+using Meteor.Employees.Core.Contracts;
 using Meteor.Employees.Core.Dtos;
 using Meteor.Employees.Core.Models;
 using Meteor.Employees.Core.Services.Contracts;
@@ -14,19 +15,23 @@ public class EmployeesServiceMessagingDecorator : IEmployeesService
 
     private readonly IPublisher<EmployeeChangedMessage> _updateEmployeePublisher;
 
-    private readonly IPublisher<EmployeeRemovedMessage> _removeEmployeePublusher;
+    private readonly IPublisher<EmployeeRemovedMessage> _removeEmployeePublisher;
+
+    private readonly ICustomerDataAccessor _customerDataAccessor;
 
     public EmployeesServiceMessagingDecorator(
-        IEmployeesService service, 
+        IEmployeesService service,
         IMapper mapper,
         IPublisher<EmployeeChangedMessage> updateEmployeePublisher,
-        IPublisher<EmployeeRemovedMessage> removeEmployeePublusher
+        IPublisher<EmployeeRemovedMessage> removeEmployeePublisher,
+        ICustomerDataAccessor customerDataAccessor
     )
     {
         _service = service;
         _mapper = mapper;
         _updateEmployeePublisher = updateEmployeePublisher;
-        _removeEmployeePublusher = removeEmployeePublusher;
+        _removeEmployeePublisher = removeEmployeePublisher;
+        _customerDataAccessor = customerDataAccessor;
     }
 
     public Task<Employee> GetEmployeeAsync(int employeeId)
@@ -43,6 +48,7 @@ public class EmployeesServiceMessagingDecorator : IEmployeesService
     {
         var employee = await _service.CreateEmployeeAsync(employeeDto);
         var message = _mapper.Map<EmployeeChangedMessage>(employee);
+        message.CustomerId = _customerDataAccessor.CustomerId;
         await _updateEmployeePublisher.PublishAsync(message);
         return employee;
     }
@@ -51,6 +57,7 @@ public class EmployeesServiceMessagingDecorator : IEmployeesService
     {
         var employee = await _service.UpdateEmployeeAsync(employeeId, employeeDto);
         var message = _mapper.Map<EmployeeChangedMessage>(employee);
+        message.CustomerId = _customerDataAccessor.CustomerId;
         await _updateEmployeePublisher.PublishAsync(message);
         return employee;
     }
@@ -58,9 +65,10 @@ public class EmployeesServiceMessagingDecorator : IEmployeesService
     public async Task RemoveEmployeeAsync(int employeeId)
     {
         await _service.RemoveEmployeeAsync(employeeId);
-        await _removeEmployeePublusher.PublishAsync(new()
+        await _removeEmployeePublisher.PublishAsync(new()
         {
             Id = employeeId,
+            CustomerId = _customerDataAccessor.CustomerId
         });
     }
 

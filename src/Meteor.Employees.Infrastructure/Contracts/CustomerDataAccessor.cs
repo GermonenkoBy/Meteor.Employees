@@ -6,4 +6,6 @@ namespace Meteor.Employees.Infrastructure.Contracts;
 public class CustomerDataAccessor : ICustomerDataAccessor
 {
     public CustomerSettings? Settings { get; set; }
+
+    public int CustomerId { get; set; }
 }

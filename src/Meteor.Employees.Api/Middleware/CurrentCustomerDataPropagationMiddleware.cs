@@ -44,6 +44,8 @@ public class CurrentCustomerDataPropagationMiddleware : IMiddleware
             return;
         }
 
+        _customerDataAccessor.CustomerId = customerId;
+
         var customerSettings = await _customersClient.GetCustomerSettingsAsync(customerId);
         if (customerSettings is not null)
         {

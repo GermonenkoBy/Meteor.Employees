@@ -1,4 +1,5 @@
-﻿using Azure.Messaging.ServiceBus;
+﻿using System.Text.Json;
+using Azure.Messaging.ServiceBus;
 using Meteor.Employees.Api.Dtos;
 using Meteor.Employees.Api.Enums;
 using Meteor.Employees.Api.HealthChecks;
@@ -13,6 +14,13 @@ public class MigrationsJob : IHostedService, IAsyncDisposable
     private const string MigrationsTopicName = "migrations";
 
     private const string SubscriptionName = "employees-service";
+
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        IncludeFields = true,
+        PropertyNameCaseInsensitive = true,
+    };
 
     private readonly IServiceProvider _serviceProvider;
 
@@ -88,7 +96,7 @@ public class MigrationsJob : IHostedService, IAsyncDisposable
     {
         try
         {
-            var customers = arg.Message.Body.ToObjectFromJson<MigrationsTriggerDto>();
+            var customers = arg.Message.Body.ToObjectFromJson<MigrationsTriggerDto>(_jsonSerializerOptions);
             foreach (var customerId in customers.CustomerIds)
             {
                 await ApplyCustomerMigrations(customerId);

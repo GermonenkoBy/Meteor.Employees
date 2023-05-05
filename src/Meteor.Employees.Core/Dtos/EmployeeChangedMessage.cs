@@ -6,6 +6,8 @@ public record struct EmployeeChangedMessage
 {
     public int Id;
 
+    public int CustomerId;
+
     public string FirstName;
 
     public string LastName;
