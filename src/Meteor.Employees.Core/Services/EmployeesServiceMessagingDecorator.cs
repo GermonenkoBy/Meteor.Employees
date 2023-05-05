@@ -67,7 +67,7 @@ public class EmployeesServiceMessagingDecorator : IEmployeesService
         await _service.RemoveEmployeeAsync(employeeId);
         await _removeEmployeePublisher.PublishAsync(new()
         {
-            Id = employeeId,
+            EmployeeId = employeeId,
             CustomerId = _customerDataAccessor.CustomerId
         });
     }

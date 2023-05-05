@@ -2,7 +2,7 @@
 
 public record EmployeeRemovedMessage
 {
-    public int Id;
+    public int EmployeeId;
 
     public int CustomerId;
 }

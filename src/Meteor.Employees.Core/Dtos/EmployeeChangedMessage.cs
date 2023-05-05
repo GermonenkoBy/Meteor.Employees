@@ -1,10 +1,14 @@
-﻿namespace Meteor.Employees.Core.Dtos;
+﻿using Mapster;
+using Meteor.Employees.Core.Models;
+
+namespace Meteor.Employees.Core.Dtos;
 
 using Models.Enums;
 
 public record struct EmployeeChangedMessage
 {
-    public int Id;
+    [AdaptMember(nameof(Employee.Id))]
+    public int EmployeeId;
 
     public int CustomerId;
 
