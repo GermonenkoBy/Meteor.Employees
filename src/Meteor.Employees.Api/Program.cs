@@ -83,13 +83,13 @@ builder.Services.AddHasher(options =>
 builder.Services.AddServiceBusPublisher<EmployeeChangedMessage>(options =>
 {
     options.SenderName = "Employees";
-    options.TopicName = "employees.changed";
+    options.TopicName = "employee-changed";
 });
 
 builder.Services.AddServiceBusPublisher<EmployeeRemovedMessage>(options =>
 {
     options.SenderName = "Employees";
-    options.TopicName = "employees.removed";
+    options.TopicName = "employee-removed";
 });
 
 var config = new TypeAdapterConfig();
